@@ -87,6 +87,9 @@ public class MainSceneController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        QualitySettings.vSyncCount = 1;
+        Application.targetFrameRate = 30;
+
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
         InitializeParametor();
