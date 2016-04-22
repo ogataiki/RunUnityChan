@@ -9,7 +9,7 @@ public class FloorController : MonoBehaviour {
     public event Action<GameObject> PreDestroy = delegate { };
 
     [SerializeField]
-    public float speed = 1.0f;
+    public float speed = 3.0f;
 
     // Use this for initialization
     void Start()
@@ -23,7 +23,11 @@ public class FloorController : MonoBehaviour {
         if (this.isMoving)
         {
             Vector3 diff = new Vector3(0.0f, 0.0f, speed) * Time.deltaTime;
-            this.gameObject.transform.position = this.gameObject.transform.position - diff;
+            this.gameObject.transform.position = Vector3.Lerp(
+                this.gameObject.transform.position,
+                this.gameObject.transform.position - diff,
+                20 * Time.deltaTime
+                );
         }
 
         if (this.gameObject.transform.position.z <= -10.0f)

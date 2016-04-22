@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class MainSceneController : MonoBehaviour {
 
     [SerializeField]
+    private GameObject mainCamera;
+    private MainCameraController mainCameraController;
+    [SerializeField]
     private GameObject subCamera;
 
     [SerializeField]
@@ -61,10 +64,11 @@ public class MainSceneController : MonoBehaviour {
     private float nextHeight_bonus = 0.05f;
     private float nextHeightMin_bonus = 0.05f;
     private float nextHeightMax_bonus = 0.6f;
-
+    private float nextSpeed_bonus = 3.0f;
+    private float bonusSpeed_base = 3.0f;
+    
     [SerializeField]
     private GameObject particleBonusGetPrefab;
-
 
     private float touchTime = 0.0f;
 
@@ -94,6 +98,9 @@ public class MainSceneController : MonoBehaviour {
 
         InitializeParametor();
 
+        mainCameraController = mainCamera.GetComponent<MainCameraController>();
+        mainCameraController.ChangePattern(0);
+
         subCamera.SetActive(false);
 
         uiGameScenePanel.SetActive(false);
@@ -119,6 +126,7 @@ public class MainSceneController : MonoBehaviour {
         nextScaleZ = nextScaleZMin;
 
         nextTime_bonus = Random.Range(nextTimeMin_bonus, nextTimeMax_bonus);
+        nextSpeed_bonus = bonusSpeed_base;
     }
 
     void UpdateTitle()
@@ -165,6 +173,7 @@ public class MainSceneController : MonoBehaviour {
             return;
         }
 
+        mainCameraController.ChangePattern(2);
         subCamera.SetActive(true);
 
         uiTitleScenePanel.SetActive(false);
@@ -231,6 +240,7 @@ public class MainSceneController : MonoBehaviour {
             GameObject bonus = Instantiate(this.bonusPrefab);
             bonus.transform.position = new Vector3(bonus.transform.position.x, nextHeight_bonus, bonus.transform.position.z + 4.0f);
             BonusController bonusController = bonus.GetComponent<BonusController>();
+            bonusController.SetSpeed(nextSpeed_bonus);
             bonusController.CollidedWithUnityChan += BonusCollidedWithUnityChan;
             bonusController.ThroughedWithUnityChan += ThroughBonus;
             bonusController.PreDestroy += BonusPreDestroy;
@@ -239,6 +249,7 @@ public class MainSceneController : MonoBehaviour {
             elapsedTime_bonus = 0.0f;
             nextTime_bonus = Random.Range(nextTimeMin_bonus, nextTimeMax_bonus);
             nextHeight_bonus = Random.Range(nextHeightMin_bonus, nextHeightMax_bonus);
+            nextSpeed_bonus = Random.Range(bonusSpeed_base-(getBonusSeries*0.02f), bonusSpeed_base + (getBonusSeries * 0.02f));
         }
 
     }
@@ -277,6 +288,8 @@ public class MainSceneController : MonoBehaviour {
                 uiGameScenePanel.SetActive(false);
                 uiTitleScenePanel.SetActive(true);
                 subCamera.SetActive(false);
+
+                mainCameraController.ChangePattern(0);
 
                 touchTime = 0.0f;
 
