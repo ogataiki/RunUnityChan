@@ -5,11 +5,11 @@ public class UnityChanController : MonoBehaviour {
 
     private Animator animator;
     private bool isJump = false;
-    private float JumpTimeBase = 0.7f; // 秒
-    private float JumpTime = 0.7f; // 秒
+    private float JumpTimeBase = 0.8f; // 秒
+    private float JumpTime = 0.8f; // 秒
     private float JumpingTime = 0.0f;
-    private float JumpHeightMax = 0.8f;
-    private float JumpHeightMin = 0.15f;
+    private float JumpHeightMax = 0.85f;
+    private float JumpHeightMin = 0.2f;
     private float JumpHeight = 0.0f;
     private float BaseY = 0.0f;
 

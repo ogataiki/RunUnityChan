@@ -11,7 +11,7 @@ public class ObstacleController : MonoBehaviour
     public event Action<GameObject> PreDestroy = delegate { };
 
     [SerializeField]
-    public float speed = 3.0f;
+    public float speed = 0.8f;
 
 	// Use this for initialization
 	void Start () {
@@ -24,11 +24,7 @@ public class ObstacleController : MonoBehaviour
         if(this.isMoving)
         {
             Vector3 diff = new Vector3(0.0f, 0.0f, speed) * Time.deltaTime;
-            this.gameObject.transform.position = Vector3.Lerp(
-                this.gameObject.transform.position,
-                this.gameObject.transform.position - diff,
-                20 * Time.deltaTime
-                );
+            this.gameObject.transform.position = this.gameObject.transform.position - diff;
         }
 
         if (this.gameObject.transform.position.z <= -10.0f)
@@ -40,6 +36,11 @@ public class ObstacleController : MonoBehaviour
     public void GoTitle()
     {
         PreDestroy(this.gameObject);
+    }
+
+    public void SetSpeed(float s)
+    {
+        speed = s;
     }
 
     public void Stop(bool value)
@@ -54,7 +55,7 @@ public class ObstacleController : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag.Contains("UnityChan"))
+        if(collision.gameObject.tag == "UnityChan")
         {
             collisionFunc();
         }
@@ -62,7 +63,7 @@ public class ObstacleController : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag.Contains("UnityChan"))
+        if (collider.gameObject.tag == "UnityChan")
         {
             collisionFunc();
         }

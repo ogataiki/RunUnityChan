@@ -22,6 +22,12 @@ public class MainSceneController : MonoBehaviour {
     private Text textTopScore;
 
     [SerializeField]
+    private Text textTutorial;
+
+    private string[] tutorialString = { "Jump by Tap on Display", "HigherJump by LongTap"};
+    private int tutorialStringIndex = 0;
+
+    [SerializeField]
     private Text textNowScore;
     private string scoreNowTitle = "Score : ";
 
@@ -35,6 +41,12 @@ public class MainSceneController : MonoBehaviour {
 
     [SerializeField]
     private UnityChanController unityChanController;
+
+    [SerializeField]
+    private float gameSpeed = 0.8f;
+
+    [SerializeField]
+    private float gameSpeedAdd = 0.02f;
 
     [SerializeField]
     private GameObject floorPrefab;
@@ -60,13 +72,17 @@ public class MainSceneController : MonoBehaviour {
     private float elapsedTime_bonus = 0.0f;
     private float nextTime_bonus = 0.0f;
     private float nextTimeMin_bonus = 1.0f;
-    private float nextTimeMax_bonus = 10.0f;
+    private float nextTimeMax_bonus = 5.0f;
     private float nextHeight_bonus = 0.05f;
     private float nextHeightMin_bonus = 0.05f;
     private float nextHeightMax_bonus = 0.6f;
-    private float nextSpeed_bonus = 3.0f;
-    private float bonusSpeed_base = 3.0f;
-    
+
+    private float nextSpeed_bonus = 0.8f;
+    [SerializeField]
+    private float bonusSpeed_base = 0.8f;
+    [SerializeField]
+    private float bonusSpeed_ratio = 0.02f;
+
     [SerializeField]
     private GameObject particleBonusGetPrefab;
 
@@ -86,13 +102,19 @@ public class MainSceneController : MonoBehaviour {
     private SceneStatus sts = SceneStatus.Title;
 
     public event System.Action GoTitle = delegate { };
+    public event System.Action<float> Speed = delegate { };
     public event System.Action<bool> Stop = delegate { };
+
+    private int frameCount = 0;
+    private float frameNextTime = 0.0f;
+
+    void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
 
     // Use this for initialization
     void Start () {
-
-        QualitySettings.vSyncCount = 1;
-        Application.targetFrameRate = 30;
 
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
@@ -112,6 +134,8 @@ public class MainSceneController : MonoBehaviour {
             CreateFloor((float)i);
         }
         Stop(true);
+
+        frameNextTime = Time.time + 1.0f;
     }
 
     void InitializeParametor()
@@ -134,10 +158,15 @@ public class MainSceneController : MonoBehaviour {
         TouchInfo info = TouchUtil.GetTouch();
         if (info == TouchInfo.Began)
         {
-            // GUIが被ってるばあいは処理しない
-            if (EventSystem.current.IsPointerOverGameObject())
+            // GUIが被ってるばあいは処理しない(引数なしはマウス用　引数ありはタッチ用)
+            if (EventSystem.current.IsPointerOverGameObject() || EventSystem.current.IsPointerOverGameObject(0))
             {
                 return;
+            }
+            else
+            {
+                tutorialStringIndex = (tutorialStringIndex >= 1) ? 0 : tutorialStringIndex + 1;
+                textTutorial.text = tutorialString[tutorialStringIndex];
             }
 
             // タッチ開始
@@ -189,6 +218,7 @@ public class MainSceneController : MonoBehaviour {
         unityChanController.GameStartTrigger();
         touchTime = 0.0f;
         Stop(false);
+        Speed(gameSpeed);
         sts = SceneStatus.RunGame;
     }
 
@@ -222,15 +252,18 @@ public class MainSceneController : MonoBehaviour {
             obstacle.transform.localScale = new Vector3(nextScaleX, nextScaleY, nextScaleZ);
             obstacle.transform.position = new Vector3(0.0f, obstacle.GetComponent<Renderer>().bounds.size.y * 0.5f, 3.0f);
             ObstacleController obstacleController = obstacle.GetComponent<ObstacleController>();
+            obstacleController.SetSpeed(gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
+            Debug.Log("obstacleSpeed:" + gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
             obstacleController.CollidedWithUnityChan += ObstacleCollidedWithUnityChan;
             obstacleController.PreDestroy += ObstaclePreDestroy;
             GoTitle += obstacleController.GoTitle;
+            Speed += obstacleController.SetSpeed;
             Stop += obstacleController.Stop;
             elapsedTime = 0.0f;
             nextTime = Random.Range(nextTimeMin, nextTimeMax);
             nextScaleX = Random.Range(nextScaleXMin, nextScaleXMax);
-            nextScaleY = Random.Range(nextScaleYMin, nextScaleYMax);
-            nextScaleZ = Random.Range(nextScaleZMin, nextScaleZMax);
+            nextScaleY = Random.Range(nextScaleYMin, (nextScaleYMin+((float)getBonusCount * 0.05f) > nextScaleYMax) ? nextScaleYMax : nextScaleYMin + ((float)getBonusCount * 0.05f));
+            nextScaleZ = Random.Range(nextScaleZMin, (nextScaleZMin + ((float)getBonusCount * 0.05f) > nextScaleZMax) ? nextScaleZMax : nextScaleZMin + ((float)getBonusCount * 0.05f));
             createObstacleCount++;
         }
 
@@ -249,7 +282,8 @@ public class MainSceneController : MonoBehaviour {
             elapsedTime_bonus = 0.0f;
             nextTime_bonus = Random.Range(nextTimeMin_bonus, nextTimeMax_bonus);
             nextHeight_bonus = Random.Range(nextHeightMin_bonus, nextHeightMax_bonus);
-            nextSpeed_bonus = Random.Range(bonusSpeed_base-(getBonusSeries*0.02f), bonusSpeed_base + (getBonusSeries * 0.02f));
+            nextSpeed_bonus = Random.Range(bonusSpeed_base-(getBonusSeries* bonusSpeed_ratio), bonusSpeed_base + ((getBonusSeries * bonusSpeed_ratio)*2));
+            Debug.Log("nextSpeed_bonus:"+ nextSpeed_bonus);
         }
 
     }
@@ -259,9 +293,17 @@ public class MainSceneController : MonoBehaviour {
         GameObject floor = Instantiate(this.floorPrefab);
         floor.transform.position = new Vector3(floor.transform.position.x, floor.transform.position.y, 1.0f * offset);
         FloorController floorController = floor.GetComponent<FloorController>();
+        floorController.SetSpeed(gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
         floorController.PreDestroy += FloorPreDestroy;
         GoTitle += floorController.GoTitle;
+        Speed += floorController.SetSpeed;
         Stop += floorController.Stop;
+    }
+
+    void UpdateSpeed()
+    {
+        Speed(gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
+        Debug.Log("GameSpeed:"+ gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
     }
 
     void UpdateGameOver()
@@ -307,6 +349,7 @@ public class MainSceneController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        frameCount++;
 
         switch(sts)
         {
@@ -324,6 +367,13 @@ public class MainSceneController : MonoBehaviour {
                 break;
             default:
                 break;
+        }
+
+        if(Time.time >= frameNextTime)
+        {
+            //Debug.Log("FPS : " + frameCount);
+            frameCount = 0;
+            frameNextTime += 1.0f;
         }
     }
 
@@ -365,6 +415,8 @@ public class MainSceneController : MonoBehaviour {
         textNowScore.text = scoreNowTitle + getBonusTotal;
         textGetCakes.text = cakesTitle + getBonusCount;
         textNowCombo.text = comboTitle + getBonusSeries;
+
+        UpdateSpeed();
     }
 
     private void ThroughBonus()
@@ -383,6 +435,7 @@ public class MainSceneController : MonoBehaviour {
     {
         ObstacleController obstacleController = obstacle.GetComponent<ObstacleController>();
         GoTitle -= obstacleController.GoTitle;
+        Speed -= obstacleController.SetSpeed;
         Stop -= obstacleController.Stop;
         Destroy(obstacle);
     }
@@ -391,6 +444,7 @@ public class MainSceneController : MonoBehaviour {
     {
         FloorController floorController = floor.GetComponent<FloorController>();
         GoTitle -= floorController.GoTitle;
+        Speed -= floorController.SetSpeed;
         Stop -= floorController.Stop;
         Destroy(floor);
     }
