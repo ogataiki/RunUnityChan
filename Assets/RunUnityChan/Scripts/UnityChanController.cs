@@ -15,8 +15,17 @@ public class UnityChanController : MonoBehaviour {
 
     private float touchTime = 0.0f;
 
+    [SerializeField]
+    public AudioClip audioClipJump;
+    [SerializeField]
+    public AudioClip audioClipLanding;
+
+    private AudioSource audioSource;
+
     // Use this for initialization
     void Start () {
+
+        audioSource = gameObject.GetComponent<AudioSource>();
 
         animator = GetComponent<Animator>();
 
@@ -112,6 +121,9 @@ public class UnityChanController : MonoBehaviour {
     {
         animator.SetBool("OnGround", false);
         JumpingTime = 0.0f;
+
+        audioSource.clip = audioClipJump;
+        audioSource.Play();
     }
 
     private void JumpTransform()
@@ -140,6 +152,9 @@ public class UnityChanController : MonoBehaviour {
                 isJump = false;
                 animator.SetBool("OnGround", true);
                 gameObject.transform.position = new Vector3(gameObject.transform.position.x, BaseY, gameObject.transform.position.z);
+
+                audioSource.clip = audioClipLanding;
+                audioSource.Play();
             }
         }
     }

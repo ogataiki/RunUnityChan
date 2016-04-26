@@ -21,7 +21,11 @@ public class MainSceneController : MonoBehaviour {
     [SerializeField]
     public AudioClip audioClipResultBad;
 
-    private AudioSource audioSource;
+    [SerializeField]
+    public AudioClip audioClipGetCake;
+
+    private AudioSource audioSourceBGM;
+    private AudioSource audioSourceSE;
 
     [SerializeField]
     private GameObject uiAllScenePanel;
@@ -138,7 +142,9 @@ public class MainSceneController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        audioSource = gameObject.GetComponent<AudioSource>();
+        AudioSource[] audioSources = gameObject.GetComponents<AudioSource>();
+        audioSourceBGM = audioSources[0];
+        audioSourceSE = audioSources[1];
 
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
@@ -162,8 +168,8 @@ public class MainSceneController : MonoBehaviour {
 
         frameNextTime = Time.time + 1.0f;
 
-        audioSource.clip = audioClipTitle;
-        audioSource.Play();
+        audioSourceBGM.clip = audioClipTitle;
+        audioSourceBGM.Play();
     }
 
     void InitializeParametor()
@@ -249,9 +255,9 @@ public class MainSceneController : MonoBehaviour {
         Speed(gameSpeed);
         sts = SceneStatus.RunGame;
 
-        audioSource.Stop();
-        audioSource.clip = audioClipGame;
-        audioSource.Play();
+        audioSourceBGM.Stop();
+        audioSourceBGM.clip = audioClipGame;
+        audioSourceBGM.Play();
     }
 
     void UpdateRunGame()
@@ -358,7 +364,7 @@ public class MainSceneController : MonoBehaviour {
 
             sts = SceneStatus.Result;
 
-            audioSource.Stop();
+            audioSourceBGM.Stop();
 
             if ((getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0)))
             {
@@ -368,7 +374,7 @@ public class MainSceneController : MonoBehaviour {
                 ResultGoodCommentFadeOut();
                 unityChanController.ResultTrigger("ToResultGood");
                 hanabi = Instantiate(this.particleHanabiPrefab);
-                audioSource.clip = audioClipResultGood;
+                audioSourceBGM.clip = audioClipResultGood;
             }
             else
             {
@@ -376,10 +382,10 @@ public class MainSceneController : MonoBehaviour {
                 textResultGoodComment.gameObject.SetActive(false);
                 unityChanController.ResultTrigger("ToResultBad");
                 hanabi = null;
-                audioSource.clip = audioClipResultBad;
+                audioSourceBGM.clip = audioClipResultBad;
             }
 
-            audioSource.Play();
+            audioSourceBGM.Play();
         }
     }
     private TweenA tween = null;
@@ -417,10 +423,10 @@ public class MainSceneController : MonoBehaviour {
                 if (getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0))
                 {
                     PlayerPrefs.SetInt(scoreTopSavePath, getBonusTotal);
-                    // debug
-                    //PlayerPrefs.SetInt(scoreTopSavePath, 0);
-                    // debug
                 }
+                // debug
+                //PlayerPrefs.SetInt(scoreTopSavePath, 0);
+                // debug
 
                 textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
@@ -442,9 +448,9 @@ public class MainSceneController : MonoBehaviour {
 
                 sts = SceneStatus.Title;
 
-                audioSource.Stop();
-                audioSource.clip = audioClipTitle;
-                audioSource.Play();
+                audioSourceBGM.Stop();
+                audioSourceBGM.clip = audioClipTitle;
+                audioSourceBGM.Play();
             }
 
             isPreChangeTitle = false;
@@ -491,7 +497,7 @@ public class MainSceneController : MonoBehaviour {
 
         Stop(true);
 
-        audioSource.Stop();
+        audioSourceBGM.Stop();
 
         sts = SceneStatus.GameOver;
     }
@@ -515,6 +521,9 @@ public class MainSceneController : MonoBehaviour {
         textNowScore.text = scoreNowTitle + getBonusTotal;
         textGetCakes.text = cakesTitle + getBonusCount;
         textNowCombo.text = comboTitle + getBonusSeries;
+
+        audioSourceSE.clip = audioClipGetCake;
+        audioSourceSE.Play();
 
         UpdateSpeed();
     }
