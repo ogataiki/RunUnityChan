@@ -92,6 +92,10 @@ public class MainSceneController : MonoBehaviour {
     [SerializeField]
     private GameObject particleBonusGetPrefab;
 
+    [SerializeField]
+    private GameObject particleHanabiPrefab;
+    private GameObject hanabi = null;
+
     private float touchTime = 0.0f;
 
     private int createObstacleCount = 0;
@@ -338,11 +342,13 @@ public class MainSceneController : MonoBehaviour {
                 textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 1.0f);
                 ResultGoodCommentFadeOut();
                 unityChanController.ResultTrigger("ToResultGood");
+                hanabi = Instantiate(this.particleHanabiPrefab);
             }
             else
             {
                 textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 0.0f);
                 unityChanController.ResultTrigger("ToResultBad");
+                hanabi = null;
             }
         }
     }
@@ -381,11 +387,16 @@ public class MainSceneController : MonoBehaviour {
                 }
 
                 // debug
-                // PlayerPrefs.SetInt(scoreTopSavePath, 0);
+                //PlayerPrefs.SetInt(scoreTopSavePath, 0);
                 // debug
 
                 textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
+                if(hanabi != null)
+                {
+                    Destroy(hanabi);
+                    hanabi = null;
+                }
 
                 unityChanController.IsTitle(true);
 

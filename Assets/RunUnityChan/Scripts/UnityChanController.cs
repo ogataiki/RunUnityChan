@@ -60,6 +60,8 @@ public class UnityChanController : MonoBehaviour {
 
     public void ResultTrigger(string s)
     {
+        InitializeParametor();
+
         animator.SetTrigger(s);
     }
 
