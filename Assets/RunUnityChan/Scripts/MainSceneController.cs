@@ -13,6 +13,17 @@ public class MainSceneController : MonoBehaviour {
     private GameObject subCamera;
 
     [SerializeField]
+    public AudioClip audioClipTitle;
+    [SerializeField]
+    public AudioClip audioClipGame;
+    [SerializeField]
+    public AudioClip audioClipResultGood;
+    [SerializeField]
+    public AudioClip audioClipResultBad;
+
+    private AudioSource audioSource;
+
+    [SerializeField]
     private GameObject uiAllScenePanel;
     [SerializeField]
     private GameObject uiTitleScenePanel;
@@ -103,6 +114,7 @@ public class MainSceneController : MonoBehaviour {
     private int getBonusTotal = 0;
     private int getBonusCount = 0;
     private int getBonusSeries = 0;
+    private bool IsNowRecord = false;
 
     private string scoreTopSavePath         = "TopScore";
 
@@ -126,6 +138,8 @@ public class MainSceneController : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        audioSource = gameObject.GetComponent<AudioSource>();
+
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
         InitializeParametor();
@@ -147,6 +161,9 @@ public class MainSceneController : MonoBehaviour {
         Stop(true);
 
         frameNextTime = Time.time + 1.0f;
+
+        audioSource.clip = audioClipTitle;
+        audioSource.Play();
     }
 
     void InitializeParametor()
@@ -231,6 +248,10 @@ public class MainSceneController : MonoBehaviour {
         Stop(false);
         Speed(gameSpeed);
         sts = SceneStatus.RunGame;
+
+        audioSource.Stop();
+        audioSource.clip = audioClipGame;
+        audioSource.Play();
     }
 
     void UpdateRunGame()
@@ -337,25 +358,35 @@ public class MainSceneController : MonoBehaviour {
 
             sts = SceneStatus.Result;
 
+            audioSource.Stop();
+
             if ((getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0)))
             {
+                IsNowRecord = true;
+                textResultGoodComment.gameObject.SetActive(true);
                 textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 1.0f);
                 ResultGoodCommentFadeOut();
                 unityChanController.ResultTrigger("ToResultGood");
                 hanabi = Instantiate(this.particleHanabiPrefab);
+                audioSource.clip = audioClipResultGood;
             }
             else
             {
-                textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 0.0f);
+                IsNowRecord = false;
+                textResultGoodComment.gameObject.SetActive(false);
                 unityChanController.ResultTrigger("ToResultBad");
                 hanabi = null;
+                audioSource.clip = audioClipResultBad;
             }
+
+            audioSource.Play();
         }
     }
-
+    private TweenA tween = null;
     void ResultGoodCommentFadeOut()
     {
-        if(sts == SceneStatus.Result)
+        Debug.Log("ResultGoodCommentFadeOut");
+        if (IsNowRecord)
         {
             TweenA.Add(textResultGoodComment.gameObject, 0.2f, 0.0f).Then(ResultGoodCommentFadeIn);
         }
@@ -363,7 +394,8 @@ public class MainSceneController : MonoBehaviour {
 
     void ResultGoodCommentFadeIn()
     {
-        if (sts == SceneStatus.Result)
+        Debug.Log("ResultGoodCommentFadeIn");
+        if (IsNowRecord)
         {
             TweenA.Add(textResultGoodComment.gameObject, 0.2f, 1.0f).Then(ResultGoodCommentFadeOut);
         }
@@ -381,14 +413,14 @@ public class MainSceneController : MonoBehaviour {
             if (isPreChangeTitle)
             {
                 // タッチ開始
+
                 if (getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0))
                 {
                     PlayerPrefs.SetInt(scoreTopSavePath, getBonusTotal);
+                    // debug
+                    //PlayerPrefs.SetInt(scoreTopSavePath, 0);
+                    // debug
                 }
-
-                // debug
-                //PlayerPrefs.SetInt(scoreTopSavePath, 0);
-                // debug
 
                 textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
@@ -409,6 +441,10 @@ public class MainSceneController : MonoBehaviour {
                 touchTime = 0.0f;
 
                 sts = SceneStatus.Title;
+
+                audioSource.Stop();
+                audioSource.clip = audioClipTitle;
+                audioSource.Play();
             }
 
             isPreChangeTitle = false;
@@ -454,6 +490,8 @@ public class MainSceneController : MonoBehaviour {
         unityChanController.OnCollidedWithObstacle();
 
         Stop(true);
+
+        audioSource.Stop();
 
         sts = SceneStatus.GameOver;
     }
