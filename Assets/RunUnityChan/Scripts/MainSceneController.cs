@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
+using Uween;
 
 public class MainSceneController : MonoBehaviour {
 
@@ -17,6 +18,8 @@ public class MainSceneController : MonoBehaviour {
     private GameObject uiTitleScenePanel;
     [SerializeField]
     private GameObject uiGameScenePanel;
+    [SerializeField]
+    private GameObject uiResultScenePanel;
 
     [SerializeField]
     private Text textTopScore;
@@ -38,6 +41,9 @@ public class MainSceneController : MonoBehaviour {
     [SerializeField]
     private Text textNowCombo;
     private string comboTitle = "Combo : ";
+
+    [SerializeField]
+    private Text textResultGoodComment;
 
     [SerializeField]
     private UnityChanController unityChanController;
@@ -126,6 +132,7 @@ public class MainSceneController : MonoBehaviour {
         subCamera.SetActive(false);
 
         uiGameScenePanel.SetActive(false);
+        uiResultScenePanel.SetActive(false);
 
         unityChanController.IsTitle(true);
 
@@ -311,25 +318,80 @@ public class MainSceneController : MonoBehaviour {
         TouchInfo info = TouchUtil.GetTouch();
         if (info == TouchInfo.Began)
         {
+            GoTitle();
+            for (int i = -50; i <= 2; i++)
+            {
+                CreateFloor(i);
+            }
+            Stop(true);
+
+            mainCameraController.ChangePattern(0);
+
+            subCamera.SetActive(false);
+
+            uiResultScenePanel.SetActive(true);
+
+            sts = SceneStatus.Result;
+
+            if ((getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0)))
+            {
+                textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 1.0f);
+                ResultGoodCommentFadeOut();
+                unityChanController.ResultTrigger("ToResultGood");
+            }
+            else
+            {
+                textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 0.0f);
+                unityChanController.ResultTrigger("ToResultBad");
+            }
+        }
+    }
+
+    void ResultGoodCommentFadeOut()
+    {
+        if(sts == SceneStatus.Result)
+        {
+            TweenA.Add(textResultGoodComment.gameObject, 0.2f, 0.0f).Then(ResultGoodCommentFadeIn);
+        }
+    }
+
+    void ResultGoodCommentFadeIn()
+    {
+        if (sts == SceneStatus.Result)
+        {
+            TweenA.Add(textResultGoodComment.gameObject, 0.2f, 1.0f).Then(ResultGoodCommentFadeOut);
+        }
+    }
+
+    void UpdateResult()
+    {
+        TouchInfo info = TouchUtil.GetTouch();
+        if (info == TouchInfo.Began)
+        {
             isPreChangeTitle = true;
         }
         else if (info == TouchInfo.Ended || info == TouchInfo.Canceled)
         {
-            if(isPreChangeTitle)
+            if (isPreChangeTitle)
             {
                 // タッチ開始
-                GoTitle();
+                if (getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0))
+                {
+                    PlayerPrefs.SetInt(scoreTopSavePath, getBonusTotal);
+                }
+
+                // debug
+                // PlayerPrefs.SetInt(scoreTopSavePath, 0);
+                // debug
+
+                textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
+
+
                 unityChanController.IsTitle(true);
 
-                for (int i = -50; i <= 2; i++)
-                {
-                    CreateFloor(i);
-                }
-                Stop(true);
-
+                uiResultScenePanel.SetActive(false);
                 uiGameScenePanel.SetActive(false);
                 uiTitleScenePanel.SetActive(true);
-                subCamera.SetActive(false);
 
                 mainCameraController.ChangePattern(0);
 
@@ -342,13 +404,8 @@ public class MainSceneController : MonoBehaviour {
         }
     }
 
-    void UpdateResult()
-    {
-
-    }
-	
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
         frameCount++;
 
         switch(sts)
@@ -386,12 +443,6 @@ public class MainSceneController : MonoBehaviour {
         unityChanController.OnCollidedWithObstacle();
 
         Stop(true);
-
-        if(getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0))
-        {
-            PlayerPrefs.SetInt(scoreTopSavePath, getBonusTotal);
-        }
-        textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
         sts = SceneStatus.GameOver;
     }

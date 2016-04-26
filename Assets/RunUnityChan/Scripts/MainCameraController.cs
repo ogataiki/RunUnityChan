@@ -28,6 +28,7 @@ public class MainCameraController : MonoBehaviour {
         new CAMERA_PATTERN(0.6f, 0.4f, 0.9f, 0.0f, 220.0f, 0.0f, true),
         new CAMERA_PATTERN(1.2f, 0.8f, 2.1f, 0.0f, 220.0f, 0.0f, false),
         new CAMERA_PATTERN(1.8f, 1.2f, 3.4f, 0.0f, 220.0f, 0.0f, false),
+        new CAMERA_PATTERN(0.6f, 0.5f, 0.9f, 0.0f, 220.0f, 0.0f, true),
     };
 
     [SerializeField]
@@ -52,7 +53,7 @@ public class MainCameraController : MonoBehaviour {
         {
             nowCameraPattern = (nowCameraPattern >= 2) ? 0 : nowCameraPattern + 1;
         }
-        else if (pattern <= 2)
+        else if (pattern <= 3)
         {
             nowCameraPattern = pattern;
         }

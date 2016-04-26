@@ -58,6 +58,11 @@ public class UnityChanController : MonoBehaviour {
         animator.SetBool("IsTitle", value);
     }
 
+    public void ResultTrigger(string s)
+    {
+        animator.SetTrigger(s);
+    }
+
     public void OnTapBegan()
     {
         if (animator.GetBool("OnGround") && animator.GetBool("OnTap") == false)
