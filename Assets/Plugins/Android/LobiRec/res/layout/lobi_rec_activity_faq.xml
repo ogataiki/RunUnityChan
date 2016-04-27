@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lobi="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lobi_rec_background"
+    android:orientation="vertical"
+    >
+
+    <com.kayac.lobi.libnakamap.components.ActionBar
+        android:id="@+id/lobi_action_bar"
+        style="@style/lobi_action_bar"
+        lobi:lobi_content_type="lobi_backable"
+        lobi:lobi_text="FAQ" />
+    <WebView 
+        android:id="@+id/lobi_rec_faq_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</LinearLayout>

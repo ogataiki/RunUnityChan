@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lobirec_accepted_to_post_video">分享這部電影！</string>
+    <string name="lobirec_accuse_cancel">指控取消</string>
+    <string name="lobirec_accuse_ok">指控 OK</string>
+    <string name="lobirec_accuse_title">指控標題</string>
+    <string name="lobirec_already_use_mic">無法使用麥克風。請退出正在使用麥克風的應用程式。</string>
+    <string name="lobirec_cant_open_image">無法開啟一個私人群組</string>
+    <string name="lobirec_cant_open_video">無法開啟影像</string>
+    <string name="lobirec_check_posted_video">看看發表的影片</string>
+    <string name="lobirec_close">關閉</string>
+    <string name="lobirec_comment">評論</string>
+    <string name="lobirec_connection_error">連線錯誤</string>
+    <string name="lobirec_duplicated_video">重複的影片</string>
+    <string name="lobirec_facebook">Facebook</string>
+    <string name="lobirec_failed">指控失敗</string>
+    <string name="lobirec_help">協助</string>
+    <string name="lobirec_insert_name">在這裡插入名稱</string>
+    <string name="lobirec_nicovideo">niconico</string>
+    <string name="lobirec_no_description">沒有說明</string>
+    <string name="lobirec_no_title">沒有標題</string>
+    <string name="lobirec_post_video">發表影片</string>
+    <string name="lobirec_posted_successfully">已發表成功</string>
+    <string name="lobirec_profile">檔案</string>
+    <string name="lobirec_recording_failed">錄影失敗</string>
+    <string name="lobirec_share">分享</string>
+    <string name="lobirec_share_with_sns">以 sns 分享</string>
+    <string name="lobirec_show_video_list">檢視影片</string>
+    <string name="lobirec_title">標題</string>
+    <string name="lobirec_too_long_description">說明太長</string>
+    <string name="lobirec_too_long_title">標題太長</string>
+    <string name="lobirec_twitter">Twitter</string>
+    <string name="lobirec_video_list">影片清單</string>
+    <string name="lobirec_video_menu">影片選單</string>
+    <string name="lobirec_youtube">Youtube</string>
+    <string name="lobisdk_time__int__colon__int">%1$02d:%2$02d</string>
+    <string name="lobisdk_video_user_name">由 %1$s</string>
+    <string name="lobisdk_views">%1$d views</string>
+</resources>

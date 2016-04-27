@@ -61,6 +61,9 @@ public class MainSceneController : MonoBehaviour {
     private Text textResultGoodComment;
 
     [SerializeField]
+    private Text textUserName;
+
+    [SerializeField]
     private UnityChanController unityChanController;
 
     [SerializeField]
@@ -137,6 +140,12 @@ public class MainSceneController : MonoBehaviour {
     void Awake()
     {
         Application.targetFrameRate = 60;
+
+        if(PlayerPrefs.GetString("UserName", "Guest") == "Guest")
+        {
+            PlayerPrefs.SetString("UserName", "Guest");
+        }
+        RankingManager.Instance.SighUp(PlayerPrefs.GetString("UserName", "Guest"));
     }
 
     // Use this for initialization
@@ -145,6 +154,8 @@ public class MainSceneController : MonoBehaviour {
         AudioSource[] audioSources = gameObject.GetComponents<AudioSource>();
         audioSourceBGM = audioSources[0];
         audioSourceSE = audioSources[1];
+
+        textUserName.text = PlayerPrefs.GetString("UserName", "");
 
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
@@ -386,6 +397,11 @@ public class MainSceneController : MonoBehaviour {
             }
 
             audioSourceBGM.Play();
+
+            RankingManager.Instance.SendRanking(RankingManager.RankingType.NekoRun_TopScore, getBonusTotal);
+            RankingManager.Instance.SendRanking(RankingManager.RankingType.NekoRun_Cakes, getBonusCount);
+            RankingManager.Instance.SendRanking(RankingManager.RankingType.NekoRun_Combo, getBonusSeries);
+
         }
     }
     private TweenA tween = null;
@@ -566,5 +582,19 @@ public class MainSceneController : MonoBehaviour {
         GoTitle -= bonusController.GoTitle;
         Stop -= bonusController.Stop;
         Destroy(bonus);
+    }
+
+    
+    public void OnInputUserName(string s)
+    {
+        if(s.Length > 0)
+        {
+            RankingManager.Instance.ChangeName(s);
+        }
+    }
+
+    public void ShowRanking()
+    {
+        RankingManager.Instance.ShowRanking();
     }
 }

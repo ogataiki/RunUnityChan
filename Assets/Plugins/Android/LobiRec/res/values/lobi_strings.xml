@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lobirec_accepted_to_post_video">share this movie!</string>
+    <string name="lobirec_accuse_cancel">accuse cancel</string>
+    <string name="lobirec_accuse_ok">accuse OK</string>
+    <string name="lobirec_accuse_title">accuse title</string>
+    <string name="lobirec_already_use_mic">can not use the microphone. please exit the application that is using a microphone.</string>
+    <string name="lobirec_cant_open_image">Can\'t open image</string>
+    <string name="lobirec_cant_open_video">Can\'t open video</string>
+    <string name="lobirec_check_posted_video">check posted video</string>
+    <string name="lobirec_close">close</string>
+    <string name="lobirec_comment">comment</string>
+    <string name="lobirec_connection_error">Connection error</string>
+    <string name="lobirec_duplicated_video">duplicated video</string>
+    <string name="lobirec_facebook">Facebook</string>
+    <string name="lobirec_failed">accuse failed</string>
+    <string name="lobirec_help">help</string>
+    <string name="lobirec_insert_name">insert name here</string>
+    <string name="lobirec_nicovideo">niconico</string>
+    <string name="lobirec_no_description">no description</string>
+    <string name="lobirec_no_title">no title</string>
+    <string name="lobirec_post_video">post video</string>
+    <string name="lobirec_posted_successfully">posted successfully</string>
+    <string name="lobirec_profile">profile</string>
+    <string name="lobirec_recording_failed">Recording failed</string>
+    <string name="lobirec_share">share</string>
+    <string name="lobirec_share_with_sns">share with sns</string>
+    <string name="lobirec_show_video_list">See videos</string>
+    <string name="lobirec_title">title</string>
+    <string name="lobirec_too_long_description">too long description</string>
+    <string name="lobirec_too_long_title">too long title</string>
+    <string name="lobirec_twitter">Twitter</string>
+    <string name="lobirec_video_list">video list</string>
+    <string name="lobirec_video_menu">video menu</string>
+    <string name="lobirec_youtube">Youtube</string>
+    <string name="lobisdk_time__int__colon__int">%1$02d:%2$02d</string>
+    <string name="lobisdk_video_user_name">by %1$s</string>
+    <string name="lobisdk_views">%1$d views</string>
+</resources>

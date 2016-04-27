@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lobi="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lobi_rec_background"
+    tools:context="com.kayac.lobi.rec.ui.RecPostVideoActivity" >
+
+    <LinearLayout
+        android:id="@+id/lobi_rec_activity_post_video_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <!-- 一緒にシェアする -->
+
+        <LinearLayout
+            android:id="@+id/share_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <View style="@style/LobiRecLine.Horizontal" />
+
+            <TextView
+                style="@style/LobiRecText.Small.Gray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/lobi_margin_low"
+                android:layout_marginLeft="@dimen/lobi_margin_high"
+                android:layout_marginRight="@dimen/lobi_margin_high"
+                android:layout_marginTop="@dimen/lobi_margin_high"
+                android:text="@string/lobirec_share_with_sns" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lobi_margin_high"
+                android:paddingLeft="@dimen/lobi_margin_high"
+                android:paddingRight="@dimen/lobi_margin_high" >
+
+                <!-- youtube -->
+
+                <LinearLayout
+                    android:id="@+id/share_youtube_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/share_web_youtube"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/lobi_icn_youtube_off" />
+
+                    <TextView
+                        style="@style/LobiRecText.Small.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/lobirec_youtube" />
+                </LinearLayout>
+
+                <!-- nicovideo -->
+
+                <LinearLayout
+                    android:id="@+id/share_nicovideo_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/share_web_nicovideo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/lobi_icn_nicovideo_off" />
+
+                    <TextView
+                        style="@style/LobiRecText.Small.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/lobirec_nicovideo" />
+                </LinearLayout>
+
+                <!-- twitter -->
+
+                <LinearLayout
+                    android:id="@+id/share_twitter_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/share_web_twitter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/lobi_icn_twitter_off" />
+
+                    <TextView
+                        style="@style/LobiRecText.Small.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/lobirec_twitter" />
+                </LinearLayout>
+
+                <!-- facebook -->
+
+                <LinearLayout
+                    android:id="@+id/share_facebook_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <ImageView
+                        android:id="@+id/share_web_facebook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/lobi_icn_facebook_off" />
+
+                    <TextView
+                        style="@style/LobiRecText.Small.Gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/lobirec_facebook" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View style="@style/LobiRecLine.Horizontal" />
+
+        <!-- プレイ動画を投稿 -->
+
+        <FrameLayout
+            android:id="@+id/lobi_rec_btn_post_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/lobi_margin_high"
+            android:background="@drawable/lobi_button_s_green_selector"
+            android:padding="@dimen/lobi_margin_high" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/lobirec_post_video"
+                android:textColor="@color/lobi_white"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lobi_margin_high"
+            android:background="@color/lobi_darker"
+            android:scaleType="fitXY"
+            android:src="@drawable/lobi_img_tab_shadow" />
+
+        <!-- みんなの動画とヘルプ -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lobi_darker"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/lobi_margin_high"
+            android:paddingLeft="@dimen/lobi_margin_high"
+            android:paddingRight="@dimen/lobi_margin_high" >
+
+            <!-- ヘルプ -->
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lobi_margin_low" >
+
+                <FrameLayout
+                    android:id="@+id/lobi_rec_btn_faq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/lobi_button_s_white_selector"
+                    android:padding="@dimen/lobi_margin_high" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/lobirec_help"
+                        android:textColor="@color/lobi_black"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <!-- みんなの動画 -->
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lobi_margin_low"
+                android:layout_weight="1.0"
+                android:paddingLeft="@dimen/lobi_margin_high" >
+
+                <FrameLayout
+                    android:id="@+id/lobi_rec_btn_video_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/lobi_button_s_white_selector"
+                    android:padding="@dimen/lobi_margin_high" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/lobirec_show_video_list"
+                        android:textColor="@color/lobi_black"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/lobi_rec_activity_post_video_footer"
+        android:orientation="vertical" >
+
+        <com.kayac.lobi.libnakamap.components.ActionBar
+            android:id="@+id/lobi_action_bar"
+            style="@style/lobi_action_bar"
+            lobi:lobi_content_type="lobi_backable"
+            lobi:lobi_text="@string/lobirec_post_video" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/lobi_rec_activity_post_video_thumbnail"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="#000"
+                            android:scaleType="centerCrop" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/lobi_rec_activity_post_video_progress"
+                        style="@android:style/Widget.ProgressBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true" />
+
+                    <ImageView
+                        android:id="@+id/lobi_rec_activity_post_video_play_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/lobi_icn_btn_play_video"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/lobi_margin_high"
+                    android:paddingRight="@dimen/lobi_margin_high"
+                    android:paddingTop="@dimen/lobi_margin_high" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            style="@style/LobiRecText.Small.Gray"
+                            android:layout_weight="1"
+                            android:text="@string/lobirec_title" />
+
+                        <TextView
+                            android:id="@+id/title_header_count"
+                            style="@style/LobiRecText.Small.Gray"
+                            android:text="100" />
+                    </LinearLayout>
+
+                    <com.kayac.lobi.libnakamap.components.UIEditText
+                        android:id="@+id/title"
+                        style="@style/LobiRecText"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/lobi_transparent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View style="@style/LobiRecLine.Horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/lobi_margin_high"
+                android:paddingRight="@dimen/lobi_margin_high" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/lobi_margin_high" >
+
+                    <TextView
+                        style="@style/LobiRecText.Small.Gray"
+                        android:layout_weight="1"
+                        android:text="@string/lobirec_comment" />
+
+                    <TextView
+                        android:id="@+id/description_header_count"
+                        style="@style/LobiRecText.Small.Gray"
+                        android:text="100" />
+                </LinearLayout>
+
+                <com.kayac.lobi.libnakamap.components.UIEditText
+                    android:id="@+id/description"
+                    style="@style/LobiRecText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@color/lobi_transparent"
+                    android:gravity="top|left" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

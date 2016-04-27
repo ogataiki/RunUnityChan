@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lobirec_accepted_to_post_video">이 영상을 공유!</string>
+    <string name="lobirec_accuse_cancel">신고 취소</string>
+    <string name="lobirec_accuse_ok">신고 OK</string>
+    <string name="lobirec_accuse_title">신고 제목</string>
+    <string name="lobirec_already_use_mic">마이크를 사용할 수 없습니다. 마이크를 사용하는 앱을 종료하세요.</string>
+    <string name="lobirec_cant_open_image">비공개 그룹을 열 수 없습니다</string>
+    <string name="lobirec_cant_open_video">이미지를 열 수 없습니다</string>
+    <string name="lobirec_check_posted_video">게시된 동영상 확인</string>
+    <string name="lobirec_close">닫기</string>
+    <string name="lobirec_comment">댓글</string>
+    <string name="lobirec_connection_error">연결 오류</string>
+    <string name="lobirec_duplicated_video">중복된 동영상</string>
+    <string name="lobirec_facebook">페이스북</string>
+    <string name="lobirec_failed">신고에 실패했습니다</string>
+    <string name="lobirec_help">도움말</string>
+    <string name="lobirec_insert_name">여기에 이름을 입력하세요</string>
+    <string name="lobirec_nicovideo">니코니코</string>
+    <string name="lobirec_no_description">설명이 없습니다</string>
+    <string name="lobirec_no_title">제목이 없습니다</string>
+    <string name="lobirec_post_video">동영상 게시</string>
+    <string name="lobirec_posted_successfully">성공적으로 게시되었습니다</string>
+    <string name="lobirec_profile">프로필</string>
+    <string name="lobirec_recording_failed">녹음에 실패했습니다</string>
+    <string name="lobirec_share">공유</string>
+    <string name="lobirec_share_with_sns">SNS에 공유</string>
+    <string name="lobirec_show_video_list">동영상 보기</string>
+    <string name="lobirec_title">제목</string>
+    <string name="lobirec_too_long_description">설명이 너무 깁니다</string>
+    <string name="lobirec_too_long_title">제목이 너무 깁니다</string>
+    <string name="lobirec_twitter">트위터</string>
+    <string name="lobirec_video_list">동영상 목록</string>
+    <string name="lobirec_video_menu">동영상 메뉴</string>
+    <string name="lobirec_youtube">유튜브</string>
+    <string name="lobisdk_time__int__colon__int">%1$02d:%2$02d</string>
+    <string name="lobisdk_video_user_name">%1$s에 의해</string>
+    <string name="lobisdk_views">%1$d views</string>
+</resources>

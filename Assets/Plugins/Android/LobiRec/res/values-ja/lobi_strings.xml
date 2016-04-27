@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lobirec_accepted_to_post_video">プレイ動画の投稿を受け付けました。\n※一覧に反映されるまでしばらくお待ちください</string>
+    <string name="lobirec_accuse_cancel">通報キャンセル</string>
+    <string name="lobirec_accuse_ok">通報OK</string>
+    <string name="lobirec_accuse_title">通報タイトル</string>
+    <string name="lobirec_already_use_mic">マイクを使用できないため実況が行えません。他のマイクを使用しているアプリケーションを終了してください。</string>
+    <string name="lobirec_cant_open_image">画像が開けません</string>
+    <string name="lobirec_cant_open_video">再生できる動画がありません</string>
+    <string name="lobirec_check_posted_video">動画を確認する</string>
+    <string name="lobirec_close">閉じる</string>
+    <string name="lobirec_comment">コメント</string>
+    <string name="lobirec_connection_error">接続に失敗しました</string>
+    <string name="lobirec_duplicated_video">既に投稿済みです</string>
+    <string name="lobirec_facebook">Facebook</string>
+    <string name="lobirec_failed">失敗しました</string>
+    <string name="lobirec_help">ヘルプ</string>
+    <string name="lobirec_insert_name">名前を入力してください</string>
+    <string name="lobirec_nicovideo">niconico</string>
+    <string name="lobirec_no_description">コメントが入力されていません</string>
+    <string name="lobirec_no_title">タイトルが入力されていません</string>
+    <string name="lobirec_post_video">プレイ動画を投稿</string>
+    <string name="lobirec_posted_successfully">投稿が成功しました。</string>
+    <string name="lobirec_profile">プロフィール</string>
+    <string name="lobirec_recording_failed">録画に失敗しました</string>
+    <string name="lobirec_share">共有する</string>
+    <string name="lobirec_share_with_sns">投稿と一緒にシェア</string>
+    <string name="lobirec_show_video_list">みんなの動画を見る</string>
+    <string name="lobirec_title">タイトル</string>
+    <string name="lobirec_too_long_description">コメントが長過ぎます</string>
+    <string name="lobirec_too_long_title">タイトルが長過ぎます</string>
+    <string name="lobirec_twitter">Twitter</string>
+    <string name="lobirec_video_list">みんなの動画</string>
+    <string name="lobirec_video_menu">動画メニュー</string>
+    <string name="lobirec_youtube">Youtube</string>
+    <string name="lobisdk_time__int__colon__int">%1$02d:%2$02d</string>
+    <string name="lobisdk_video_user_name">by %1$s</string>
+    <string name="lobisdk_views">%1$dViews</string>
+</resources>
