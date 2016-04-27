@@ -19,13 +19,21 @@ public class UnityChanController : MonoBehaviour {
     public AudioClip audioClipJump;
     [SerializeField]
     public AudioClip audioClipLanding;
+    [SerializeField]
+    public AudioClip audioClipCatCry1;
+    [SerializeField]
+    public AudioClip audioClipCatCry2;
 
-    private AudioSource audioSource;
+    private AudioSource audioSourceSE;
+    private AudioSource audioSourceCatCry;
+
 
     // Use this for initialization
     void Start () {
 
-        audioSource = gameObject.GetComponent<AudioSource>();
+        AudioSource[] audioSources = gameObject.GetComponents<AudioSource>();
+        audioSourceSE       = audioSources[0];
+        audioSourceCatCry   = audioSources[1];
 
         animator = GetComponent<Animator>();
 
@@ -81,6 +89,7 @@ public class UnityChanController : MonoBehaviour {
             animator.SetBool("OnTap", true);
             animator.SetBool("PreJump", false);
             touchTime = Time.time;
+            audioSourceSE.clip = audioClipJump;
         }
     }
 
@@ -96,12 +105,15 @@ public class UnityChanController : MonoBehaviour {
             animator.SetBool("OnTap", true);
             animator.SetBool("PreJump", false);
             touchTime = Time.time;
+            audioSourceSE.clip = audioClipJump;
         }
     }
 
     public void OnTapped() {
         if(animator.GetBool("OnTap"))
         {
+            audioSourceSE.Play();
+
             float tappedTime = (Time.time - touchTime);
             JumpHeight = JumpHeightMin + tappedTime;
             if (JumpHeight >= JumpHeightMax)
@@ -121,9 +133,6 @@ public class UnityChanController : MonoBehaviour {
     {
         animator.SetBool("OnGround", false);
         JumpingTime = 0.0f;
-
-        audioSource.clip = audioClipJump;
-        audioSource.Play();
     }
 
     private void JumpTransform()
@@ -141,6 +150,8 @@ public class UnityChanController : MonoBehaviour {
             }
             else
             {
+                audioSourceSE.clip = audioClipLanding;
+
                 // 下降中
                 float m = diffY * 0.3f;
                 moveY = gameObject.transform.position.y - m;
@@ -153,8 +164,7 @@ public class UnityChanController : MonoBehaviour {
                 animator.SetBool("OnGround", true);
                 gameObject.transform.position = new Vector3(gameObject.transform.position.x, BaseY, gameObject.transform.position.z);
 
-                audioSource.clip = audioClipLanding;
-                audioSource.Play();
+                audioSourceSE.Play();
             }
         }
     }
@@ -163,10 +173,15 @@ public class UnityChanController : MonoBehaviour {
     {
         animator.SetTrigger("Collision");
         animator.SetBool("GameOver", true);
+
+        audioSourceCatCry.clip = audioClipCatCry1;
+        audioSourceCatCry.Play();
     }
 
-    public void OnCollidedWithButterfly()
+    public void OnCollidedWithCake()
     {
+        audioSourceCatCry.clip = audioClipCatCry2;
+        audioSourceCatCry.Play();
     }
 
     public void OnCallChangeFace() {

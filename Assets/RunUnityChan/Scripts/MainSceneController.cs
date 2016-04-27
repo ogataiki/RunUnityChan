@@ -508,6 +508,7 @@ public class MainSceneController : MonoBehaviour {
         {
             return;
         }
+        unityChanController.OnCollidedWithCake();
 
         GameObject p = Instantiate(this.particleBonusGetPrefab);
         p.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
