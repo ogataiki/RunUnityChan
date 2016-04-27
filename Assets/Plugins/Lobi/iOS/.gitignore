@@ -1,4 +1,0 @@
-**/*.xcodeproj/*
-!**/*.xcodeproj/project.pbxproj
-**/DerivedData
-**/Intermediates

@@ -61,7 +61,7 @@ public class MainSceneController : MonoBehaviour {
     private Text textResultGoodComment;
 
     [SerializeField]
-    private Text textUserName;
+    private InputField textUserName;
 
     [SerializeField]
     private UnityChanController unityChanController;
@@ -141,11 +141,6 @@ public class MainSceneController : MonoBehaviour {
     {
         Application.targetFrameRate = 60;
 
-        if(PlayerPrefs.GetString("UserName", "Guest") == "Guest")
-        {
-            PlayerPrefs.SetString("UserName", "Guest");
-        }
-        RankingManager.Instance.SighUp(PlayerPrefs.GetString("UserName", "Guest"));
     }
 
     // Use this for initialization
@@ -155,7 +150,13 @@ public class MainSceneController : MonoBehaviour {
         audioSourceBGM = audioSources[0];
         audioSourceSE = audioSources[1];
 
-        textUserName.text = PlayerPrefs.GetString("UserName", "");
+        Debug.Log("UserName:"+ PlayerPrefs.GetString("UserName", "Guest"));
+        textUserName.text = PlayerPrefs.GetString("UserName", "Guest");
+        if (PlayerPrefs.GetString("UserName", "Guest") == "Guest")
+        {
+            PlayerPrefs.SetString("UserName", "Guest");
+        }
+        RankingManager.Instance.SighUp(PlayerPrefs.GetString("UserName", "Guest"));
 
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
@@ -585,10 +586,14 @@ public class MainSceneController : MonoBehaviour {
     }
 
     
-    public void OnInputUserName(string s)
+    public void OnInputUserName()
     {
-        if(s.Length > 0)
+        string s = textUserName.text;
+        Debug.Log("UserName:"+s);
+        if(s != "")
         {
+            PlayerPrefs.SetString("UserName", s);
+
             RankingManager.Instance.ChangeName(s);
         }
     }
