@@ -14,7 +14,7 @@ public class RankingManager : SingletonMonoBehaviour<RankingManager>
     //ランキングの種類(兼ID)
     public enum RankingType
     {
-        NekoRun_TopScore = 0, NekoRun_Cakes, NekoRun_Combo
+        NekoRun_TopScore = 1, NekoRun_Cakes = 2, NekoRun_Combo = 3
     }
 
     //ランキングに登録する初期値
@@ -96,19 +96,18 @@ public class RankingManager : SingletonMonoBehaviour<RankingManager>
     /// </summary>
     public void SendRanking(RankingType rankingType, int score)
     {
+        Debug.Log(rankingType.ToString());
         if (LobiCoreBridge.IsSignedIn() && PlayerPrefs.GetString("UserName", "Guest") != "Guest")
         {
             LobiRankingAPIBridge.SendRanking(name, "SendRankingCallback", rankingType.ToString(), score);
-        }
-        else
-        {
-            SighUp(PlayerPrefs.GetString("UserName", "Guest"));
         }
     }
 
     //スコア送信後
     private void SendRankingCallback(string message)
     {
+        Debug.Log(message);
+
         //ランキング情報を取得し、順位等を確認
         GetRankingData();
     }
@@ -205,6 +204,8 @@ public class RankingManager : SingletonMonoBehaviour<RankingManager>
     //サインアップ完了
     private void SignupWithBaseNameCallback(string message)
     {
+        Debug.Log(message);
+
         //ユーザ登録が済んだら、デフォルト値をランキングに登録
         foreach (RankingType rankingType in Enum.GetValues(typeof(RankingType)))
         {
@@ -228,6 +229,8 @@ public class RankingManager : SingletonMonoBehaviour<RankingManager>
     //ユーザ名変更完了
     private void ChangeNameCallback(string message)
     {
+        Debug.Log(message);
+
     }
 
 }
