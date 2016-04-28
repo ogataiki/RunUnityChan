@@ -14,7 +14,7 @@
     <application>
         <meta-data
             android:name="com.kayac.lobi.sdk.clientId"
-            android:value="f92bd261db0bf4a1cf277fcee37d26d07d1e06ec" >
+            android:value="a39f943d22f6b7fae727a04d2a619d274f72986a" >
         </meta-data>
         <meta-data
             android:name="com.kayac.lobi.sdk.accountBaseName"
@@ -26,7 +26,7 @@
         
         <service android:name="com.kayac.nakamap.sdk.auth.NakamapAuthCallbackService" android:exported="true">
             <intent-filter>
-                <action android:name="com.kayac.nakamap.NAKAMAP_APP_AUTH_CALLBACK_f92bd261db0bf4a1cf277fcee37d26d07d1e06ec" />
+                <action android:name="com.kayac.nakamap.NAKAMAP_APP_AUTH_CALLBACK_a39f943d22f6b7fae727a04d2a619d274f72986a" />
             </intent-filter>
         </service>
         
@@ -76,7 +76,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="nakamapapp-f92bd261db0bf4a1cf277fcee37d26d07d1e06ec" />
+                <data android:scheme="nakamapapp-a39f943d22f6b7fae727a04d2a619d274f72986a" />
             </intent-filter>
         </activity>
         <activity
