@@ -76,6 +76,8 @@ public class MainSceneController : MonoBehaviour {
     [SerializeField]
     private float gameSpeedAdd = 0.02f;
 
+    private int gameSpeedCount = 0;
+
     [SerializeField]
     private GameObject floorPrefab;
 
@@ -113,6 +115,21 @@ public class MainSceneController : MonoBehaviour {
 
     [SerializeField]
     private GameObject particleBonusGetPrefab;
+
+
+    [SerializeField]
+    private GameObject rareBonusPrefab;
+    [SerializeField]
+    private float rareBonusProb = 10.0f;
+    [SerializeField]
+    private ParticleRareBonusGetController rareBonusGetController;
+    [SerializeField]
+    private float invincibleTime = 10.0f;
+    private float invincibleTimeNow = 0.0f;
+
+    [SerializeField]
+    private GameObject particleRareBonusGetPrefab;
+
 
     [SerializeField]
     private GameObject particleHanabiPrefab;
@@ -158,6 +175,8 @@ public class MainSceneController : MonoBehaviour {
         {
             DialogManager.Instance.SetLabel("Yes", "No", "Close");
         }
+
+        rareBonusGetController.ParticleStop();
 
         AudioSource[] audioSources = gameObject.GetComponents<AudioSource>();
         audioSourceBGM = audioSources[0];
@@ -318,8 +337,8 @@ public class MainSceneController : MonoBehaviour {
             obstacle.transform.localScale = new Vector3(nextScaleX, nextScaleY, nextScaleZ);
             obstacle.transform.position = new Vector3(0.0f, obstacle.GetComponent<Renderer>().bounds.size.y * 0.5f, 3.0f);
             ObstacleController obstacleController = obstacle.GetComponent<ObstacleController>();
-            obstacleController.SetSpeed(gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
-            Debug.Log("obstacleSpeed:" + gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
+            obstacleController.SetSpeed(gameSpeed + ((float)gameSpeedCount) * gameSpeedAdd);
+            //Debug.Log("obstacleSpeed:" + gameSpeed + ((float)gameSpeedCount) * gameSpeedAdd);
             obstacleController.CollidedWithUnityChan += ObstacleCollidedWithUnityChan;
             obstacleController.PreDestroy += ObstaclePreDestroy;
             GoTitle += obstacleController.GoTitle;
@@ -336,22 +355,57 @@ public class MainSceneController : MonoBehaviour {
         elapsedTime_bonus += Time.deltaTime;
         if (nextTime_bonus <= elapsedTime_bonus)
         {
-            GameObject bonus = Instantiate(this.bonusPrefab);
-            bonus.transform.position = new Vector3(bonus.transform.position.x, nextHeight_bonus, bonus.transform.position.z + 4.0f);
-            BonusController bonusController = bonus.GetComponent<BonusController>();
-            bonusController.SetSpeed(nextSpeed_bonus);
-            bonusController.CollidedWithUnityChan += BonusCollidedWithUnityChan;
-            bonusController.ThroughedWithUnityChan += ThroughBonus;
-            bonusController.PreDestroy += BonusPreDestroy;
-            GoTitle += bonusController.GoTitle;
-            Stop += bonusController.Stop;
+            // 3%の確率
+            if (getBonusSeries > 5 && invincibleTimeNow < 1.0f && Random.Range(1.0f, 100.0f) <= 15.0f)
+            {
+                CreateRareBonus();
+            }
+            else
+            {
+                CreateBonus();
+            }
             elapsedTime_bonus = 0.0f;
             nextTime_bonus = Random.Range(nextTimeMin_bonus, nextTimeMax_bonus);
             nextHeight_bonus = Random.Range(nextHeightMin_bonus, nextHeightMax_bonus);
-            nextSpeed_bonus = Random.Range(bonusSpeed_base-(getBonusSeries* bonusSpeed_ratio), bonusSpeed_base + ((getBonusSeries * bonusSpeed_ratio)*2));
-            Debug.Log("nextSpeed_bonus:"+ nextSpeed_bonus);
+            nextSpeed_bonus = Random.Range(bonusSpeed_base - (getBonusSeries * bonusSpeed_ratio), bonusSpeed_base + ((getBonusSeries * bonusSpeed_ratio) * 2));
+            //Debug.Log("nextSpeed_bonus:" + nextSpeed_bonus);
         }
 
+        if (invincibleTimeNow > 0.0f)
+        {
+            invincibleTimeNow -= (1.0f * Time.deltaTime);
+        }
+        if (rareBonusGetController != null && invincibleTimeNow < 2.0f)
+        {
+            // 実際の無敵時間より早めに終わらせる
+            rareBonusGetController.ParticleStop();
+        }
+    }
+
+    void CreateBonus()
+    {
+        GameObject bonus = Instantiate(this.bonusPrefab);
+        bonus.transform.position = new Vector3(bonus.transform.position.x, nextHeight_bonus, bonus.transform.position.z + 4.0f);
+        BonusController bonusController = bonus.GetComponent<BonusController>();
+        bonusController.SetSpeed(nextSpeed_bonus);
+        bonusController.CollidedWithUnityChan += BonusCollidedWithUnityChan;
+        bonusController.ThroughedWithUnityChan += ThroughBonus;
+        bonusController.PreDestroy += BonusPreDestroy;
+        GoTitle += bonusController.GoTitle;
+        Stop += bonusController.Stop;
+    }
+
+    void CreateRareBonus()
+    {
+        GameObject bonus = Instantiate(this.rareBonusPrefab);
+        bonus.transform.position = new Vector3(bonus.transform.position.x, nextHeight_bonus, bonus.transform.position.z + 4.0f);
+        BonusController bonusController = bonus.GetComponent<BonusController>();
+        bonusController.SetSpeed(bonusSpeed_base);
+        bonusController.CollidedWithUnityChan += RareBonusCollidedWithUnityChan;
+        bonusController.ThroughedWithUnityChan += ThroughBonus;
+        bonusController.PreDestroy += BonusPreDestroy;
+        GoTitle += bonusController.GoTitle;
+        Stop += bonusController.Stop;
     }
 
     void CreateFloor(float offset)
@@ -368,8 +422,8 @@ public class MainSceneController : MonoBehaviour {
 
     void UpdateSpeed()
     {
-        Speed(gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
-        Debug.Log("GameSpeed:"+ gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
+        Speed(gameSpeed + ((float)gameSpeedCount) * gameSpeedAdd);
+        //Debug.Log("GameSpeed:"+ gameSpeed + ((float)gameSpeedCount) * gameSpeedAdd);
     }
 
     void UpdateGameOver()
@@ -426,7 +480,7 @@ public class MainSceneController : MonoBehaviour {
     private TweenA tween = null;
     void ResultGoodCommentFadeOut()
     {
-        Debug.Log("ResultGoodCommentFadeOut");
+        //Debug.Log("ResultGoodCommentFadeOut");
         if (IsNowRecord)
         {
             TweenA.Add(textResultGoodComment.gameObject, 0.2f, 0.0f).Then(ResultGoodCommentFadeIn);
@@ -435,7 +489,7 @@ public class MainSceneController : MonoBehaviour {
 
     void ResultGoodCommentFadeIn()
     {
-        Debug.Log("ResultGoodCommentFadeIn");
+        //Debug.Log("ResultGoodCommentFadeIn");
         if (IsNowRecord)
         {
             TweenA.Add(textResultGoodComment.gameObject, 0.2f, 1.0f).Then(ResultGoodCommentFadeOut);
@@ -547,17 +601,24 @@ public class MainSceneController : MonoBehaviour {
         {
             return;
         }
+        if(invincibleTimeNow > 0.0f)
+        {
+            return;
+        }
         unityChanController.OnCollidedWithObstacle();
 
         Stop(true);
 
         audioSourceBGM.Stop();
 
+        gameSpeedCount = 0;
+
         sts = SceneStatus.GameOver;
     }
 
     private void BonusCollidedWithUnityChan(Vector3 position)
     {
+        Debug.Log("GetBonus!!!");
         if (sts != SceneStatus.RunGame)
         {
             return;
@@ -568,10 +629,12 @@ public class MainSceneController : MonoBehaviour {
         p.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
 
         // 得点加算
-        Debug.Log("!!bonus!!");
+        //Debug.Log("!!bonus!!");
         getBonusCount++;
         getBonusSeries++;
         getBonusTotal += getBonusCount * getBonusSeries;
+
+        gameSpeedCount++;
 
         textNowScore.text = scoreNowTitle + getBonusTotal;
         textGetCakes.text = cakesTitle + getBonusCount;
@@ -583,6 +646,29 @@ public class MainSceneController : MonoBehaviour {
         UpdateSpeed();
     }
 
+    private void RareBonusCollidedWithUnityChan(Vector3 position)
+    {
+        Debug.Log("GetRareBonus!!!");
+        if (sts != SceneStatus.RunGame)
+        {
+            return;
+        }
+        unityChanController.OnCollidedWithRareCake();
+
+        if(rareBonusGetController == null)
+        {
+        }
+
+        rareBonusGetController.ParticleStart();
+
+        audioSourceSE.clip = audioClipGetCake;
+        audioSourceSE.Play();
+
+        gameSpeedCount = 0;
+
+        invincibleTimeNow = invincibleTime;
+    }
+
     private void ThroughBonus()
     {
         if (sts != SceneStatus.RunGame)
@@ -590,9 +676,9 @@ public class MainSceneController : MonoBehaviour {
             return;
         }
 
-        Debug.Log("!!Through!!");
+        Debug.Log("!!BonusThrough!!");
         getBonusSeries = 0;
-        Debug.Log("series:" + getBonusSeries);
+        //Debug.Log("series:" + getBonusSeries);
     }
 
     private void ObstaclePreDestroy(GameObject obstacle)

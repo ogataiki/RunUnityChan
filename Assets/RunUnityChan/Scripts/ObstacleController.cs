@@ -50,7 +50,6 @@ public class ObstacleController : MonoBehaviour
 
     void collisionFunc()
     {
-        this.isMoving = false;
         this.CollidedWithUnityChan();
     }
     void OnCollisionEnter(Collision collision)

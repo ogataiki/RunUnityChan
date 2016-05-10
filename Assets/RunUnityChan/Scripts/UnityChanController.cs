@@ -184,6 +184,12 @@ public class UnityChanController : MonoBehaviour {
         audioSourceCatCry.Play();
     }
 
+    public void OnCollidedWithRareCake()
+    {
+        audioSourceCatCry.clip = audioClipCatCry2;
+        audioSourceCatCry.Play();
+    }
+
     public void OnCallChangeFace() {
 	}
 }
