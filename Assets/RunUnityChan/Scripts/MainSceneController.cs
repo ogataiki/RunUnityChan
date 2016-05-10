@@ -13,6 +13,10 @@ public class MainSceneController : MonoBehaviour {
     private GameObject subCamera;
 
     [SerializeField]
+    private GameObject unityAds;
+    private UnityAdsScript unityAdsScript;
+
+    [SerializeField]
     public AudioClip audioClipTitle;
     [SerializeField]
     public AudioClip audioClipGame;
@@ -144,13 +148,22 @@ public class MainSceneController : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
+
+        if(Application.systemLanguage == SystemLanguage.Japanese)
+        {
+            DialogManager.Instance.SetLabel("いいよ", "だめ", "うるさい");
+        }
+        else
+        {
+            DialogManager.Instance.SetLabel("Yes", "No", "Close");
+        }
 
         AudioSource[] audioSources = gameObject.GetComponents<AudioSource>();
         audioSourceBGM = audioSources[0];
         audioSourceSE = audioSources[1];
 
-        Debug.Log("UserName:"+ PlayerPrefs.GetString("UserName", "Guest"));
+        Debug.Log("UserName:" + PlayerPrefs.GetString("UserName", "Guest"));
         textUserName.text = PlayerPrefs.GetString("UserName", "Guest");
         if (PlayerPrefs.GetString("UserName", "Guest") == "Guest")
         {
@@ -161,6 +174,8 @@ public class MainSceneController : MonoBehaviour {
         textTopScore.text = "Top Score : " + PlayerPrefs.GetInt(scoreTopSavePath, 0);
 
         InitializeParametor();
+
+        unityAdsScript = unityAds.GetComponent<UnityAdsScript>();
 
         mainCameraController = mainCamera.GetComponent<MainCameraController>();
         mainCameraController.ChangePattern(0);
@@ -247,6 +262,7 @@ public class MainSceneController : MonoBehaviour {
             // テストジャンプ中は処理しない
             return;
         }
+        IsNowRecord = false;
 
         mainCameraController.ChangePattern(2);
         subCamera.SetActive(true);
@@ -380,6 +396,8 @@ public class MainSceneController : MonoBehaviour {
 
             if ((getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0)))
             {
+                PlayerPrefs.SetInt(scoreTopSavePath, getBonusTotal);
+
                 IsNowRecord = true;
                 textResultGoodComment.gameObject.SetActive(true);
                 textResultGoodComment.color = new Color(1.0f, 1.0f, 0.0f, 1.0f);
@@ -437,10 +455,29 @@ public class MainSceneController : MonoBehaviour {
             {
                 // タッチ開始
 
-                if (getBonusTotal > PlayerPrefs.GetInt(scoreTopSavePath, 0))
+                if (IsNowRecord)
                 {
-                    PlayerPrefs.SetInt(scoreTopSavePath, getBonusTotal);
+                    string dialog_message = "";
+                    if (Application.systemLanguage == SystemLanguage.Japanese)
+                    {
+                        dialog_message = "ハイスコアおめでとう！\n少しの間、他のゲームのPRをさせてください！";
+                    }
+                    else
+                    {
+                        dialog_message = "Congratulations!\nCould you see the Game advertising？";
+                    }
+                    DialogManager.Instance.ShowSelectDialog(
+                        dialog_message,
+                        (bool result) => {
+                            if (result == true)
+                            {
+                                // YESの場合のみ、ここの処理が走る。
+                                unityAdsScript.ShowAd();
+                            }
+                        }
+                    );
                 }
+
                 // debug
                 //PlayerPrefs.SetInt(scoreTopSavePath, 0);
                 // debug
