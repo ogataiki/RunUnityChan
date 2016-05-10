@@ -109,7 +109,7 @@ public class MainSceneController : MonoBehaviour {
     [SerializeField]
     private float bonusSpeed_base = 0.8f;
     [SerializeField]
-    private float bonusSpeed_ratio = 0.02f;
+    private float bonusSpeed_ratio = 0.05f;
 
     [SerializeField]
     private GameObject particleBonusGetPrefab;
@@ -318,8 +318,8 @@ public class MainSceneController : MonoBehaviour {
             obstacle.transform.localScale = new Vector3(nextScaleX, nextScaleY, nextScaleZ);
             obstacle.transform.position = new Vector3(0.0f, obstacle.GetComponent<Renderer>().bounds.size.y * 0.5f, 3.0f);
             ObstacleController obstacleController = obstacle.GetComponent<ObstacleController>();
-            obstacleController.SetSpeed(gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
-            Debug.Log("obstacleSpeed:" + gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
+            obstacleController.SetSpeed(gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
+            Debug.Log("obstacleSpeed:" + gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
             obstacleController.CollidedWithUnityChan += ObstacleCollidedWithUnityChan;
             obstacleController.PreDestroy += ObstaclePreDestroy;
             GoTitle += obstacleController.GoTitle;
@@ -368,8 +368,8 @@ public class MainSceneController : MonoBehaviour {
 
     void UpdateSpeed()
     {
-        Speed(gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
-        Debug.Log("GameSpeed:"+ gameSpeed + ((float)getBonusSeries) * gameSpeedAdd);
+        Speed(gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
+        Debug.Log("GameSpeed:"+ gameSpeed + ((float)getBonusCount) * gameSpeedAdd);
     }
 
     void UpdateGameOver()
