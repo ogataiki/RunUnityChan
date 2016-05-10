@@ -120,12 +120,13 @@ public class MainSceneController : MonoBehaviour {
     [SerializeField]
     private GameObject rareBonusPrefab;
     [SerializeField]
-    private float rareBonusProb = 10.0f;
+    private float rareBonusProb = 5.0f;
     [SerializeField]
     private ParticleRareBonusGetController rareBonusGetController;
     [SerializeField]
     private float invincibleTime = 10.0f;
     private float invincibleTimeNow = 0.0f;
+    private int invincibleCount = 0;
 
     [SerializeField]
     private GameObject particleRareBonusGetPrefab;
@@ -224,6 +225,9 @@ public class MainSceneController : MonoBehaviour {
         getBonusCount = 0;
         getBonusTotal = 0;
         getBonusSeries = 0;
+
+        gameSpeedCount = 0;
+        invincibleCount = 0;
 
         nextScaleX = nextScaleXMax;
         nextScaleY = nextScaleYMin;
@@ -356,9 +360,15 @@ public class MainSceneController : MonoBehaviour {
         if (nextTime_bonus <= elapsedTime_bonus)
         {
             // 3%の確率
-            if (getBonusSeries > 5 && invincibleTimeNow < 1.0f && Random.Range(1.0f, 100.0f) <= 15.0f)
+            if (getBonusSeries > 5 && invincibleTimeNow < 1.0f && Random.Range(1.0f, 100.0f) <= rareBonusProb)
             {
                 CreateRareBonus();
+                invincibleCount = 0;
+            }
+            else if (invincibleCount >= 50)
+            {
+                CreateRareBonus();
+                invincibleCount = 0;
             }
             else
             {
@@ -366,6 +376,10 @@ public class MainSceneController : MonoBehaviour {
             }
             elapsedTime_bonus = 0.0f;
             nextTime_bonus = Random.Range(nextTimeMin_bonus, nextTimeMax_bonus);
+            if (invincibleTimeNow > 0.0f)
+            {
+                nextTime_bonus *= 0.15f;
+            }
             nextHeight_bonus = Random.Range(nextHeightMin_bonus, nextHeightMax_bonus);
             nextSpeed_bonus = Random.Range(bonusSpeed_base - (getBonusSeries * bonusSpeed_ratio), bonusSpeed_base + ((getBonusSeries * bonusSpeed_ratio) * 2));
             //Debug.Log("nextSpeed_bonus:" + nextSpeed_bonus);
@@ -635,6 +649,7 @@ public class MainSceneController : MonoBehaviour {
         getBonusTotal += getBonusCount * getBonusSeries;
 
         gameSpeedCount++;
+        invincibleCount++;
 
         textNowScore.text = scoreNowTitle + getBonusTotal;
         textGetCakes.text = cakesTitle + getBonusCount;
@@ -655,9 +670,7 @@ public class MainSceneController : MonoBehaviour {
         }
         unityChanController.OnCollidedWithRareCake();
 
-        if(rareBonusGetController == null)
-        {
-        }
+        invincibleCount = 0;
 
         rareBonusGetController.ParticleStart();
 
@@ -667,6 +680,8 @@ public class MainSceneController : MonoBehaviour {
         gameSpeedCount = 0;
 
         invincibleTimeNow = invincibleTime;
+
+        nextTime_bonus = 0.0f;
     }
 
     private void ThroughBonus()
