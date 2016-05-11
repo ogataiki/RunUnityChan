@@ -6,6 +6,9 @@ using Uween;
 
 public class MainSceneController : MonoBehaviour {
 
+    private float dt = 0.02f;
+    private bool isPause = false;
+
     [SerializeField]
     private GameObject mainCamera;
     private MainCameraController mainCameraController;
@@ -127,6 +130,8 @@ public class MainSceneController : MonoBehaviour {
     private float invincibleTime = 10.0f;
     private float invincibleTimeNow = 0.0f;
     private int invincibleCount = 0;
+    private int firstInvincibleCount = 10;
+    private bool isFirstInvincible = false;
 
     [SerializeField]
     private GameObject particleRareBonusGetPrefab;
@@ -161,12 +166,14 @@ public class MainSceneController : MonoBehaviour {
 
     void Awake()
     {
+        QualitySettings.vSyncCount = 1;
         Application.targetFrameRate = 60;
-
     }
 
     // Use this for initialization
     void Start() {
+
+        dt = Time.deltaTime * 1f;
 
         if(Application.systemLanguage == SystemLanguage.Japanese)
         {
@@ -235,6 +242,8 @@ public class MainSceneController : MonoBehaviour {
 
         nextTime_bonus = Random.Range(nextTimeMin_bonus, nextTimeMax_bonus);
         nextSpeed_bonus = bonusSpeed_base;
+
+        isFirstInvincible = false;
     }
 
     void UpdateTitle()
@@ -317,24 +326,36 @@ public class MainSceneController : MonoBehaviour {
         if (info == TouchInfo.Began)
         {
             // タッチ開始
-            //Debug.Log("TapBegan");
-            unityChanController.OnTapBegan();
-            touchTime = Time.time;
+
+            // GUIが被ってるばあいは処理しない(引数なしはマウス用　引数ありはタッチ用)
+            if (EventSystem.current.IsPointerOverGameObject() == false && EventSystem.current.IsPointerOverGameObject(0) == false)
+            {
+                //Debug.Log("TapBegan");
+                unityChanController.OnTapBegan();
+                touchTime = Time.time;
+            }
         }
         else if (info == TouchInfo.Ended || info == TouchInfo.Canceled)
         {
             // タッチ終了
-            //Debug.Log("TapEnded");
-            unityChanController.OnTapped();
-            touchTime = 0.0f;
+
+            if (touchTime > 0.0f)
+            {
+                //Debug.Log("TapEnded");
+                unityChanController.OnTapped();
+                touchTime = 0.0f;
+            }
         }
         else if (touchTime > 0.0f || info == TouchInfo.Stationary || info == TouchInfo.Moved)
         {
-            //Debug.Log("OnTapping");
-            unityChanController.OnTapping();
+            if (touchTime > 0.0f)
+            {
+                //Debug.Log("OnTapping");
+                unityChanController.OnTapping();
+            }
         }
 
-        elapsedTime += Time.deltaTime;
+        elapsedTime += dt;
         if (nextTime <= elapsedTime)
         {
             GameObject obstacle = Instantiate(this.obstaclePrefab);
@@ -356,16 +377,22 @@ public class MainSceneController : MonoBehaviour {
             createObstacleCount++;
         }
 
-        elapsedTime_bonus += Time.deltaTime;
+        elapsedTime_bonus += dt;
         if (nextTime_bonus <= elapsedTime_bonus)
         {
             // 3%の確率
-            if (getBonusSeries > 5 && invincibleTimeNow < 1.0f && Random.Range(1.0f, 100.0f) <= rareBonusProb)
+            if (isFirstInvincible == false && getBonusCount >= firstInvincibleCount)
+            {
+                isFirstInvincible = true;
+                CreateRareBonus();
+                invincibleCount = 0;
+            }
+            else if (getBonusCount >= firstInvincibleCount && getBonusSeries > 5 && invincibleTimeNow < 1.0f && Random.Range(1.0f, 100.0f) <= rareBonusProb)
             {
                 CreateRareBonus();
                 invincibleCount = 0;
             }
-            else if (invincibleCount >= 50)
+            else if (invincibleCount >= 30)
             {
                 CreateRareBonus();
                 invincibleCount = 0;
@@ -387,7 +414,7 @@ public class MainSceneController : MonoBehaviour {
 
         if (invincibleTimeNow > 0.0f)
         {
-            invincibleTimeNow -= (1.0f * Time.deltaTime);
+            invincibleTimeNow -= (1.0f * dt);
         }
         if (rareBonusGetController != null && invincibleTimeNow < 2.0f)
         {
@@ -583,7 +610,12 @@ public class MainSceneController : MonoBehaviour {
     void Update () {
         frameCount++;
 
-        switch(sts)
+        if (isPause)
+        {
+            return;
+        }
+
+        switch (sts)
         {
             case SceneStatus.Title:
                 UpdateTitle();
@@ -739,5 +771,19 @@ public class MainSceneController : MonoBehaviour {
     public void ShowRanking()
     {
         RankingManager.Instance.ShowRanking();
+    }
+
+    public void OnPause()
+    {
+        if(isPause)
+        {
+            isPause = false;
+            Time.timeScale = 1;
+        }
+        else
+        {
+            isPause = true;
+            Time.timeScale = 0;
+        }
     }
 }
